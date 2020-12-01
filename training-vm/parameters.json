@@ -8,9 +8,6 @@
         "virtualNetworkId": {
             "value": "/subscriptions/bc3f5473-20ce-4a4d-b3e6-c78d2baf9d06/resourceGroups/Training-v1/providers/Microsoft.Network/virtualNetworks/TrainingNet"
         },
-        "virtualMachineName": {
-            "value": "windows-analyst-station-"
-        },
         "virtualMachineComputerName": {
             "value": "windows-forensic-workstation"
         },
