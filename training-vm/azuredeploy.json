@@ -61,14 +61,18 @@
         },
         "autoShutdownNotificationLocale": {
             "type": "string"
+        },
+        "utcText": {
+            "type": "string",
+            "defaultValue": "[utcNow('Mds')]"
         }
     },
     "variables": {
         "vnetId": "[parameters('virtualNetworkId')]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
         "storageAccountName": "[concat(parameters('storagePrefix'), uniqueString(resourceGroup().id))]",
-        "networkInterfaceName": "[concat(parameters('networkInterfacePrefix'), utcNow('Mds'))]",
-        "virtualMachineName": "[concat(parameters('virtualMachineNamePrefix'), utcNow('Mds'))]"
+        "networkInterfaceName": "[concat(parameters('networkInterfacePrefix'), parameters('utcText'))]",
+        "virtualMachineName": "[concat(parameters('virtualMachineNamePrefix'), parameters('utcText'))]"
     },
     "resources": [
         {
