@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "subnetName": {
+            "value": "TrainingHosts"
+        },
+        "virtualNetworkId": {
+            "value": "/subscriptions/bc3f5473-20ce-4a4d-b3e6-c78d2baf9d06/resourceGroups/Training-v1/providers/Microsoft.Network/virtualNetworks/TrainingNet"
+        },
+        "virtualMachineName": {
+            "value": "windows-analyst-station-"
+        },
+        "virtualMachineComputerName": {
+            "value": "windows-forensic-workstation"
+        },
+        "virtualMachineRG": {
+            "value": "Training-v1"
+        },
+        "osDiskType": {
+            "value": "StandardSSD_LRS"
+        },
+        "virtualMachineSize": {
+            "value": "Standard_D4s_v3"
+        },
+        "adminUsername": {
+            "value": "Analyst"
+        },
+        "adminPassword": {
+            "value": null
+        },
+        "patchMode": {
+            "value": "AutomaticByOS"
+        },
+        "autoShutdownStatus": {
+            "value": "Enabled"
+        },
+        "autoShutdownTime": {
+            "value": "19:00"
+        },
+        "autoShutdownTimeZone": {
+            "value": "AUS Eastern Standard Time"
+        },
+        "autoShutdownNotificationStatus": {
+            "value": "Disabled"
+        },
+        "autoShutdownNotificationLocale": {
+            "value": "en"
+        }
+    }
+}
