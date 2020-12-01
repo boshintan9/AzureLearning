@@ -4,7 +4,7 @@
     "parameters": {
         "storagePrefix": {
             "type": "string",
-            "defaultValue": "storeAcct",
+            "defaultValue": "storeacct",
             "minLength": 3,
             "maxLength": 11
         },
