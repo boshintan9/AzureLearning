@@ -23,9 +23,6 @@
         "adminUsername": {
             "value": "Analyst"
         },
-        "adminPassword": {
-            "value": null
-        },
         "patchMode": {
             "value": "AutomaticByOS"
         },

@@ -41,8 +41,13 @@
         "adminUsername": {
             "type": "string"
         },
-        "adminPassword": {
-            "type": "secureString"
+        "adminPasswordPrefix": {
+            "type": "secureString",
+            "minLength": 8,
+            "defaultValue": "training",
+            "metadata": {
+                "description": "Administrator password for the machine. Auto generated and printed after deployment."
+            }
         },
         "patchMode": {
             "type": "string"
@@ -64,7 +69,7 @@
         },
         "utcText": {
             "type": "string",
-            "defaultValue": "[utcNow('Mds')]"
+            "defaultValue": "[utcNow('YYMd')]"
         }
     },
     "variables": {
@@ -72,7 +77,8 @@
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
         "storageAccountName": "[concat(parameters('storagePrefix'), uniqueString(resourceGroup().id))]",
         "networkInterfaceName": "[concat(parameters('networkInterfacePrefix'), parameters('utcText'))]",
-        "virtualMachineName": "[concat(parameters('virtualMachineNamePrefix'), parameters('utcText'))]"
+        "virtualMachineName": "[concat(parameters('virtualMachineNamePrefix'), parameters('utcText'))]",
+        "adminPassword": "[concat(parameters('adminPasswordPrefix'), uniqueString(resourceGroup().id, deployment().name))]"
     },
     "resources": [
         {
@@ -153,7 +159,7 @@
                 "osProfile": {
                     "computerName": "[parameters('virtualMachineComputerName')]",
                     "adminUsername": "[parameters('adminUsername')]",
-                    "adminPassword": "[parameters('adminPassword')]",
+                    "adminPassword": "[variables('adminPassword')]",
                     "windowsConfiguration": {
                         "enableAutomaticUpdates": true,
                         "provisionVmAgent": true,
@@ -204,6 +210,10 @@
         "adminUsername": {
             "type": "string",
             "value": "[parameters('adminUsername')]"
+        },
+        "generatedPassword": {
+            "type": "string",
+            "value": "[variables('adminPassword')]"
         }
     }
 }
