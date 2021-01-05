@@ -2,11 +2,17 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "subnetName": {
-            "value": "TrainingHosts"
+        "bastionHostNamePrefix": {
+            "value": "BastionHost"
         },
-        "virtualNetworkId": {
-            "value": "/subscriptions/bc3f5473-20ce-4a4d-b3e6-c78d2baf9d06/resourceGroups/Training-v1/providers/Microsoft.Network/virtualNetworks/TrainingNet"
+        "bastionPublicIpAddressNamePrefix":{
+            "value": "BastionIP"
+        },
+        "virtualNetworkPrefix": {
+            "value": "TrainingNet"
+        },
+        "hostSubnetName": {
+            "value": "TrainingHosts"
         },
         "virtualMachineComputerName": {
             "value": "win10-forensics"
@@ -25,21 +31,6 @@
         },
         "patchMode": {
             "value": "AutomaticByOS"
-        },
-        "autoShutdownStatus": {
-            "value": "Enabled"
-        },
-        "autoShutdownTime": {
-            "value": "19:00"
-        },
-        "autoShutdownTimeZone": {
-            "value": "AUS Eastern Standard Time"
-        },
-        "autoShutdownNotificationStatus": {
-            "value": "Disabled"
-        },
-        "autoShutdownNotificationLocale": {
-            "value": "en"
         }
     }
 }
