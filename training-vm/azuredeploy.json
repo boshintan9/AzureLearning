@@ -44,7 +44,7 @@
         "adminPasswordPrefix": {
             "type": "secureString",
             "minLength": 8,
-            "defaultValue": "training",
+            "defaultValue": "Training ",
             "metadata": {
                 "description": "Administrator password for the machine. Auto generated and printed after deployment."
             }
@@ -69,7 +69,7 @@
         },
         "utcText": {
             "type": "string",
-            "defaultValue": "[utcNow('YYMd')]"
+            "defaultValue": "[utcNow('yMd')]"
         }
     },
     "variables": {
