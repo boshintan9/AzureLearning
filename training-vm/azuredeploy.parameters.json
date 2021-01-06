@@ -31,6 +31,21 @@
         },
         "patchMode": {
             "value": "AutomaticByOS"
+        },
+        "internetNatNamePrefix": {
+            "value": "internetNatGateway"
+        },
+        "natIPAddressNamePrefix": {
+            "value": "internetNatIp"
+        },
+        "natIPAddressPrefixNamePrefix": {
+            "value": "internetNatIpPrefix"
+        },
+        "net-sku": {
+            "value": "Standard"
+        },
+        "net-zones": {
+            "value": []
         }
     }
 }

@@ -2,6 +2,24 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "internetNatNamePrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "The first part of the name for the NAT gateway resource providing internet to the training VM"
+            }
+        },
+        "natIPAddressNamePrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "The first part of the name for the public IP address for the internet NAT gateway."
+            }
+        },
+        "natIPAddressPrefixNamePrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "The first part of the name for the internet NAT public IP address prefixes resource."
+            }
+        },
         "bastionHostNamePrefix": {
             "type": "string"
         },
@@ -61,18 +79,29 @@
         },
         "utcText": {
             "type": "string",
-            "defaultValue": "[utcNow('yMd')]"
+            "defaultValue": "[utcNow('yyMMdd')]",
+            "metadata": {
+                "description": "This parameter's default value is a 6 character YearMonthDay number, e.g. 210110 . This number is used to complete the names of most resources throughout the template."
+            }
         },
         "virtualNetworkPrefix": {
-            "defaultValue": "TrainingNet",
             "type": "String"
         },
         "bastionNSGName": {
             "type": "string",
             "defaultValue": "bastion-access"
+        },
+        "net-sku": {
+            "type": "string"
+        },
+        "net-zones": {
+            "type": "array"
         }
     },
     "variables": {
+        "internetNatName": "[concat(parameters('internetNatNamePrefix'), parameters('utcText'))]",
+        "natIPAddressName": "[concat(parameters('natIPAddressNamePrefix'), parameters('utcText'))]",
+        "natIPAddressPrefixName": "[concat(parameters('natIPAddressPrefixNamePrefix'), parameters('utcText'))]",
         "bastionPublicIpAddressName": "[concat(parameters('bastionPublicIpAddressNamePrefix'), parameters('utcText'))]",
         "bastionHostName": "[concat(parameters('bastionHostNamePrefix'), parameters('utcText'))]",
         "vnetName": "[concat(parameters('virtualNetworkPrefix'), parameters('utcText'))]",
@@ -113,12 +142,105 @@
             }
         },
         {
+            "apiVersion": "2019-02-01",
+            "type": "Microsoft.Network/publicIpAddresses",
+            "name": "[variables('bastionPublicIpAddressName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('net-sku')]"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Static"
+            },
+            "tags": {}
+        },
+        {
+            "apiVersion": "2019-02-01",
+            "type": "Microsoft.Network/publicIpAddresses",
+            "name": "[variables('natIPAddressName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('net-sku')]"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Static"
+            }
+        },
+        {
+            "apiVersion": "2019-09-01",
+            "type": "Microsoft.Network/publicipprefixes",
+            "name": "[variables('natIPAddressPrefixName')]",
+            "location": "[parameters('location')]",
+            "zones": "[parameters('net-zones')]",
+            "sku": {
+                "name": "[parameters('net-sku')]"
+            },
+            "properties": {
+                "prefixLength": 30
+            }
+        },
+        {
+            "apiVersion": "2019-09-01",
+            "type": "Microsoft.Network/natGateways",
+            "name": "[variables('internetNATName')]",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "sku": {
+                "name": "[parameters('net-sku')]"
+            },
+            "zones": "[parameters('net-zones')]",
+            "properties": {
+                "publicIPAddresses": [
+                    {
+                        "id": "[resourceId('Microsoft.Network/publicIpAddresses/', variables('natIPAddressName'))]"
+                    }
+                ],
+                "publicIPPrefixes": [
+                    {
+                        "id": "[resourceId('Microsoft.Network/publicipprefixes/', variables('natIPAddressPrefixName'))]"
+                    }
+                ],
+                "idleTimeoutInMinutes": 4
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIpAddresses/', variables('natIPAddressName'))]",
+                "[resourceId('Microsoft.Network/publicipprefixes/', variables('natIPAddressPrefixName'))]"
+            ]
+        },
+        {
+            "apiVersion": "2018-10-01",
+            "type": "Microsoft.Network/bastionHosts",
+            "name": "[variables('bastionHostName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]",
+                "[resourceId('Microsoft.Network/publicIpAddresses', variables('bastionPublicIpAddressName'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "IpConf",
+                        "properties": {
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'),parameters('bastionHostSubnetName'))]"
+                            },
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIpAddresses', variables('bastionPublicIpAddressName'))]"
+                            }
+                        }
+                    }
+                ]
+            },
+            "tags": {}
+        },
+        {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-05-01",
             "name": "[variables('vnetName')]",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('bastionNSGName'))]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('bastionNSGName'))]",
+                "[resourceId('Microsoft.Network/natGateways/', variables('internetNatName'))]"
             ],
             "tags": {
                 "training": "network"
@@ -163,7 +285,10 @@
                             ],
                             "delegations": [],
                             "privateEndpointNetworkPolicies": "Disabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
+                            "privateLinkServiceNetworkPolicies": "Enabled",
+                            "natGateway": {
+                                "id": "[resourceId('Microsoft.Network/natGateways/', variables('internetNatName'))]"
+                            }
                         }
                     }
                 ],
@@ -171,45 +296,6 @@
                 "enableDdosProtection": false,
                 "enableVmProtection": false
             }
-        },
-        {
-            "apiVersion": "2019-02-01",
-            "type": "Microsoft.Network/publicIpAddresses",
-            "name": "[variables('bastionPublicIpAddressName')]",
-            "location": "[parameters('location')]",
-            "sku": {
-                "name": "Standard"
-            },
-            "properties": {
-                "publicIPAllocationMethod": "Static"
-            },
-            "tags": {}
-        },
-        {
-            "apiVersion": "2018-10-01",
-            "type": "Microsoft.Network/bastionHosts",
-            "name": "[variables('bastionHostName')]",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]",
-                "[resourceId('Microsoft.Network/publicIpAddresses', variables('bastionPublicIpAddressName'))]"
-            ],
-            "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "IpConf",
-                        "properties": {
-                            "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'),parameters('bastionHostSubnetName'))]"
-                            },
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIpAddresses', variables('bastionPublicIpAddressName'))]"
-                            }
-                        }
-                    }
-                ]
-            },
-            "tags": {}
         },
         {
             "type": "Microsoft.Storage/storageAccounts",
