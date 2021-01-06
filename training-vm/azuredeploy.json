@@ -1,7 +1,7 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {
+    "parameters": { // TODO: Add in defaults for everything that I can. Sort Alphabetically
         "internetNatNamePrefix": {
             "type": "string",
             "metadata": {
@@ -98,7 +98,7 @@
             "type": "array"
         }
     },
-    "variables": {
+    "variables": { // TODO: Sort alphabetically
         "internetNatName": "[concat(parameters('internetNatNamePrefix'), parameters('utcText'))]",
         "natIPAddressName": "[concat(parameters('natIPAddressNamePrefix'), parameters('utcText'))]",
         "natIPAddressPrefixName": "[concat(parameters('natIPAddressPrefixNamePrefix'), parameters('utcText'))]",
@@ -110,12 +110,12 @@
         "virtualMachineName": "[concat(parameters('virtualMachineNamePrefix'), parameters('utcText'))]",
         "adminPassword": "[concat(parameters('adminPasswordPrefix'), uniqueString(resourceGroup().id, deployment().name))]"
     },
-    "resources": [
+    "resources": [ // TODO: Add in tags for all resources
         {
             "type": "Microsoft.Network/networkSecurityGroups",
-            "apiVersion": "2020-05-01",
             "name": "[parameters('bastionNSGName')]",
             "location": "[parameters('location')]",
+            "apiVersion": "2020-05-01",
             "properties": {
                 "securityRules": [
                     {
@@ -142,10 +142,10 @@
             }
         },
         {
-            "apiVersion": "2019-02-01",
             "type": "Microsoft.Network/publicIpAddresses",
             "name": "[variables('bastionPublicIpAddressName')]",
             "location": "[parameters('location')]",
+            "apiVersion": "2019-02-01",
             "sku": {
                 "name": "[parameters('net-sku')]"
             },
@@ -155,10 +155,10 @@
             "tags": {}
         },
         {
-            "apiVersion": "2019-02-01",
             "type": "Microsoft.Network/publicIpAddresses",
             "name": "[variables('natIPAddressName')]",
             "location": "[parameters('location')]",
+            "apiVersion": "2019-02-01",
             "sku": {
                 "name": "[parameters('net-sku')]"
             },
@@ -167,9 +167,9 @@
             }
         },
         {
-            "apiVersion": "2019-09-01",
             "type": "Microsoft.Network/publicipprefixes",
             "name": "[variables('natIPAddressPrefixName')]",
+            "apiVersion": "2019-09-01",
             "location": "[parameters('location')]",
             "zones": "[parameters('net-zones')]",
             "sku": {
@@ -180,9 +180,9 @@
             }
         },
         {
-            "apiVersion": "2019-09-01",
             "type": "Microsoft.Network/natGateways",
             "name": "[variables('internetNATName')]",
+            "apiVersion": "2019-09-01",
             "location": "[parameters('location')]",
             "tags": {},
             "sku": {
@@ -208,10 +208,10 @@
             ]
         },
         {
-            "apiVersion": "2018-10-01",
             "type": "Microsoft.Network/bastionHosts",
             "name": "[variables('bastionHostName')]",
             "location": "[parameters('location')]",
+            "apiVersion": "2018-10-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]",
                 "[resourceId('Microsoft.Network/publicIpAddresses', variables('bastionPublicIpAddressName'))]"
@@ -235,9 +235,9 @@
         },
         {
             "type": "Microsoft.Network/virtualNetworks",
-            "apiVersion": "2020-05-01",
             "name": "[variables('vnetName')]",
             "location": "[parameters('location')]",
+            "apiVersion": "2020-05-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('bastionNSGName'))]",
                 "[resourceId('Microsoft.Network/natGateways/', variables('internetNatName'))]"
@@ -309,8 +309,8 @@
             "properties": {}
         },
         {
-            "name": "[variables('networkInterfaceName')]",
             "type": "Microsoft.Network/networkInterfaces",
+            "name": "[variables('networkInterfaceName')]",
             "apiVersion": "2018-10-01",
             "location": "[parameters('location')]",
             "dependsOn": [
