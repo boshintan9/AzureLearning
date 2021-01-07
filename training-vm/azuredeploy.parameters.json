@@ -17,9 +17,6 @@
         "natIPAddressNamePrefix": {
             "value": "Internet-NAT-IP"
         },
-        "natIPAddressPrefixNamePrefix": {
-            "value": "Internet-NAT-IP-Prefixes-"
-        },
         "vmOsDiskType": {
             "value": "StandardSSD_LRS"
         },

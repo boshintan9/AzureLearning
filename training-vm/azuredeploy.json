@@ -74,13 +74,6 @@
                 "description": "The first part of the name for the public IP address for the NAT gateway for host internet traffic. The second part is set by the 'deploymentSuffix' parameter"
             }
         },
-        "natIPAddressPrefixNamePrefix": {
-            "type": "string",
-            "defaultValue": "Internet-NAT-IP-Prefixes-",
-            "metadata": {
-                "description": "The first part of the name for the IP address prefixes for the NAT gateway resource. The second part is set by the 'deploymentSuffix' parameter"
-            }
-        },
         "networkInterfacePrefix": {
             "type": "string",
             "defaultValue": "Windows-Int-",
@@ -141,7 +134,6 @@
         "bastionHostSubnetName": "AzureBastionSubnet", // This name should alway be "AzureBastionSubnet" - Bastions expect it will exist when they are attached to a vnet.
         "internetNatName": "[concat(parameters('internetNatNamePrefix'), parameters('deploymentSuffix'))]",
         "natIPAddressName": "[concat(parameters('natIPAddressNamePrefix'), parameters('deploymentSuffix'))]",
-        "natIPAddressPrefixName": "[concat(parameters('natIPAddressPrefixNamePrefix'), parameters('deploymentSuffix'))]",
         "networkInterfaceName": "[concat(parameters('networkInterfacePrefix'), parameters('deploymentSuffix'))]",
         "storageAccountName": "[concat(parameters('storageAccountNamePrefix'), uniqueString(resourceGroup().id))]",
         "virtualMachineName": "[concat(parameters('virtualMachineNamePrefix'), parameters('deploymentSuffix'))]",
@@ -203,19 +195,6 @@
                 "publicIPAllocationMethod": "Static"
             }
         },
-        { // I don't think this is actually necessary.
-            "type": "Microsoft.Network/publicipprefixes",
-            "name": "[variables('natIPAddressPrefixName')]",
-            "apiVersion": "2019-09-01",
-            "location": "[parameters('location')]",
-            "zones": [],
-            "sku": {
-                "name": "Standard"
-            },
-            "properties": {
-                "prefixLength": 30
-            }
-        },
         {
             "type": "Microsoft.Network/natGateways",
             "name": "[variables('internetNATName')]",
@@ -232,16 +211,10 @@
                         "id": "[resourceId('Microsoft.Network/publicIpAddresses/', variables('natIPAddressName'))]"
                     }
                 ],
-                "publicIPPrefixes": [
-                    {
-                        "id": "[resourceId('Microsoft.Network/publicipprefixes/', variables('natIPAddressPrefixName'))]"
-                    }
-                ],
                 "idleTimeoutInMinutes": 4
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIpAddresses/', variables('natIPAddressName'))]",
-                "[resourceId('Microsoft.Network/publicipprefixes/', variables('natIPAddressPrefixName'))]"
+                "[resourceId('Microsoft.Network/publicIpAddresses/', variables('natIPAddressName'))]"
             ]
         },
         {
