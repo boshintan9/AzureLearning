@@ -6,10 +6,10 @@
             "value": "Analyst"
         },
         "bastionHostNamePrefix": {
-            "value": "Bastion-Host-"
+            "value": "Bastion-Host"
         },
         "bastionPublicIpAddressNamePrefix":{
-            "value": "Bastion-IP-"
+            "value": "Bastion-IP"
         },
         "hostSubnetName": {
             "value": "Training-Hosts"
@@ -27,10 +27,10 @@
             "value": "win10-forensics"
         },
         "internetNatNamePrefix": {
-            "value": "Internet-NAT-Gateway-"
+            "value": "Internet-NAT-Gateway"
         },
         "virtualNetworkNamePrefix": {
-            "value": "Training-Net-"
+            "value": "Training-Net"
         }
     }
 }

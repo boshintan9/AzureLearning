@@ -33,7 +33,7 @@
         },
         "bastionPublicIpAddressNamePrefix": {
             "type": "string",
-            "defaultValue": "Bastion-IP-",
+            "defaultValue": "Bastion-IP",
             "metadata": {
                 "description": "The first part of the external IP address Azure name used by the Bastion host. The second part is set by the 'deploymentSuffix' parameter."
             }
@@ -55,7 +55,7 @@
         },
         "internetNatNamePrefix": {
             "type": "string",
-            "defaultValue": "Internet-NAT-Gateway-",
+            "defaultValue": "Internet-NAT-Gateway",
             "metadata": {
                 "description": "The first part of the name for the NAT gateway resource providing internet to the training VM. The second part is set by the 'deploymentSuffix' parameter"
             }
@@ -69,14 +69,14 @@
         },
         "natIPAddressNamePrefix": {
             "type": "string",
-            "defaultValue": "Internet-NAT-IP-",
+            "defaultValue": "Internet-NAT-IP",
             "metadata": {
                 "description": "The first part of the name for the public IP address for the NAT gateway for host internet traffic. The second part is set by the 'deploymentSuffix' parameter"
             }
         },
         "networkInterfacePrefix": {
             "type": "string",
-            "defaultValue": "Windows-Int-",
+            "defaultValue": "Windows-Int",
             "metadata": {
                 "description": "The first part of the name of the network interface attached to the analysis VM. The second part is set by the 'deploymentSuffix' parameter."
             }
@@ -85,9 +85,9 @@
             "type": "string",
             "minLength": 3,
             "maxLength": 11,
-            "defaultValue": "StorageAcct",
+            "defaultValue": "storageacct",
             "metadata": {
-                "description": "The first part of the name for the analysis VM's storage account. The second part is randomised to avoid deployment issues."
+                "description": "The first part of the name for the analysis VM's storage account. Must be lowercase alphanumerics. The second part is randomised to avoid deployment issues."
             }
         },
         "virtualMachineComputerName": {
@@ -101,7 +101,7 @@
         },
         "virtualMachineNamePrefix": {
             "type": "string",
-            "defaultValue": "Windows-Analysis-VM-",
+            "defaultValue": "Windows-Analysis-VM",
             "metadata": {
                 "description": "The first part of the name for the analysis VM (in Azure). The second part is set by the 'deploymentSuffix' parameter."
             }
@@ -115,7 +115,7 @@
         },
         "virtualNetworkNamePrefix": {
             "type": "String",
-            "defaultValue": "TrainingNet-"
+            "defaultValue": "Training-Net"
 
         },
         "vmOsDiskType": {
@@ -129,15 +129,15 @@
     },
     "variables": { 
         "adminPassword": "[concat(parameters('adminPasswordPrefix'), uniqueString(resourceGroup().id, deployment().name))]",
-        "bastionHostName": "[concat(parameters('bastionHostNamePrefix'), parameters('deploymentSuffix'))]",
-        "bastionPublicIpAddressName": "[concat(parameters('bastionPublicIpAddressNamePrefix'), parameters('deploymentSuffix'))]",
+        "bastionHostName": "[concat(parameters('bastionHostNamePrefix'), '-', parameters('deploymentSuffix'))]",
+        "bastionPublicIpAddressName": "[concat(parameters('bastionPublicIpAddressNamePrefix'), '-', parameters('deploymentSuffix'))]",
         "bastionHostSubnetName": "AzureBastionSubnet", // This name should alway be "AzureBastionSubnet" - Bastions expect it will exist when they are attached to a vnet.
         "internetNatName": "[concat(parameters('internetNatNamePrefix'), parameters('deploymentSuffix'))]",
-        "natIPAddressName": "[concat(parameters('natIPAddressNamePrefix'), parameters('deploymentSuffix'))]",
-        "networkInterfaceName": "[concat(parameters('networkInterfacePrefix'), parameters('deploymentSuffix'))]",
+        "natIPAddressName": "[concat(parameters('natIPAddressNamePrefix'), '-', parameters('deploymentSuffix'))]",
+        "networkInterfaceName": "[concat(parameters('networkInterfacePrefix'), '-', parameters('deploymentSuffix'))]",
         "storageAccountName": "[concat(parameters('storageAccountNamePrefix'), uniqueString(resourceGroup().id))]",
-        "virtualMachineName": "[concat(parameters('virtualMachineNamePrefix'), parameters('deploymentSuffix'))]",
-        "vnetName": "[concat(parameters('virtualNetworkNamePrefix'), parameters('deploymentSuffix'))]"
+        "virtualMachineName": "[concat(parameters('virtualMachineNamePrefix'), '-', parameters('deploymentSuffix'))]",
+        "vnetName": "[concat(parameters('virtualNetworkNamePrefix'), '-', parameters('deploymentSuffix'))]"
     },
     "resources": [ // TODO: Add in tags for all resources
         { // To be honest, I'm not sure this NSG actually does that much.
