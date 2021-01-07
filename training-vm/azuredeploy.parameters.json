@@ -2,50 +2,38 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "adminUsername": {
+            "value": "Analyst"
+        },
         "bastionHostNamePrefix": {
-            "value": "BastionHost"
+            "value": "Bastion-Host-"
         },
         "bastionPublicIpAddressNamePrefix":{
-            "value": "BastionIP"
-        },
-        "virtualNetworkPrefix": {
-            "value": "TrainingNet"
+            "value": "Bastion-IP-"
         },
         "hostSubnetName": {
-            "value": "TrainingHosts"
+            "value": "Training-Hosts"
         },
-        "virtualMachineComputerName": {
-            "value": "win10-forensics"
+        "natIPAddressNamePrefix": {
+            "value": "Internet-NAT-IP"
         },
-        "virtualMachineRG": {
-            "value": "Training-v1"
+        "natIPAddressPrefixNamePrefix": {
+            "value": "Internet-NAT-IP-Prefixes-"
         },
-        "osDiskType": {
+        "vmOsDiskType": {
             "value": "StandardSSD_LRS"
         },
         "virtualMachineSize": {
             "value": "Standard_D4s_v3"
         },
-        "adminUsername": {
-            "value": "Analyst"
-        },
-        "patchMode": {
-            "value": "AutomaticByOS"
+        "virtualMachineComputerName": {
+            "value": "win10-forensics"
         },
         "internetNatNamePrefix": {
-            "value": "internetNatGateway"
+            "value": "Internet-NAT-Gateway-"
         },
-        "natIPAddressNamePrefix": {
-            "value": "internetNatIp"
-        },
-        "natIPAddressPrefixNamePrefix": {
-            "value": "internetNatIpPrefix"
-        },
-        "net-sku": {
-            "value": "Standard"
-        },
-        "net-zones": {
-            "value": []
+        "virtualNetworkNamePrefix": {
+            "value": "Training-Net-"
         }
     }
 }
