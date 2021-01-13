@@ -421,7 +421,7 @@
                 "typeHandlerVersion": "1.10",
                 "autoUpgradeMinorVersion":true,
                 "protectedSettings": {
-                    "commandToExecute": "(echo Powershell.exe -NoProfile -ExecutionPolicy unrestricted -Command \"[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://raw.githubusercontent.com/fireeye/flare-vm/master/install.ps1'))) -norestart\") > c:\\Users\\Analyst\\Desktop\\Launch-FlareVM-Install.bat"
+                    "commandToExecute": "(echo Powershell.exe -NoProfile -ExecutionPolicy unrestricted -Command \"[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://raw.githubusercontent.com/fireeye/flare-vm/master/install.ps1'))) -norestart\") > c:\\Users\\Default\\Desktop\\Launch-FlareVM-Install.bat"
                 }
             }
         }
