@@ -1,0 +1,2 @@
+# Azure Learning
+This is my Azure learning repo, in it lives any ARM templates I have written for automated Azure deployments. Each project lives in a separate folder, depending on the learning/design goals of a particular topic. Each sub-directory will have a README that will provide instructions on how to use the included template files.
